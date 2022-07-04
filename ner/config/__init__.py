@@ -1,0 +1,1 @@
+from ner.config import *
