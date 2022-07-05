@@ -23,10 +23,15 @@ class DataIngestion:
             # Task Implement save data to artifacts/data_store , write check if data already exists there
             # if not then only fetch from load_dataset
             logger.info(f"Loading Data from Hugging face ")
-            pan_en_data = load_dataset(self.data_ingestion_config.dataset_name,
+            
+            if pan_en_data in self.data_ingestion_config.data_store:
+                logger.info(f"Data already exists in the data store")
+            else:
+                logger.info(f"Data does not exist in the data store hence loading the same")
+                pan_en_data = load_dataset(self.data_ingestion_config.dataset_name,
                                        name=self.data_ingestion_config.subset_name)
             logger.info(f"Dataset Info : {pan_en_data}")
-
+            
             return pan_en_data
 
         except Exception as e:
