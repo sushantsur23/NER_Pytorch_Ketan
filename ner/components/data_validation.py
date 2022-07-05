@@ -42,8 +42,13 @@ class DataValidation:
         try:
             """ Implement Type Check Here """
             logger.info(" Checking type check of all the splits ")
-            result = self.data_validation_config.type_check
-            return True
+            # result = self.data_validation_config.type_check
+            if type(self.data_validation_config) =='dict':
+                logger.info(f"Data type is correct")
+                return True
+            else:
+                logger.info(f"Data type is not correct")
+                return False
         except Exception as e:
             logger.exception(e)
             raise CustomException(e, sys)
@@ -52,8 +57,18 @@ class DataValidation:
         try:
             """ Implement null Check Here """
             logger.info(" Checking null check of all the splits ")
-            result = self.data_validation_config.null_check
-            return True
+            column_names = self.data_validation_config.keys()
+            for i in column_names:
+                if (type(self.data_validation_config[i]) == int) and (self.data_validation_config[i].isnull()==True):
+                    self.data_validation_config[i].fillna(self.data_validation_config[i].mean(), inplace=True)
+                    logger.info(f"Null check is Actioned")
+                    return True
+                else:
+                    logger.info(f"Column name maynot be numeric type")
+                    return False
+
+            # result = self.data_validation_config.null_check
+            # return True
         except Exception as e:
             logger.exception(e)
             raise CustomException(e, sys)
